@@ -1,0 +1,202 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="color-scheme" content="dark">
+<title>IAM > AD Integration > User Activation Options</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.6.1/dist/reveal.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.6.1/dist/theme/black.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js-menu@2.1.0/menu.css">
+<style>
+  :root {
+    --amber:#f5a623; --red:#ff5c5c; --green:#3ddc84; --purple:#bb86fc; --blue:#5fb3ff; --peach:#ffb787;
+    --accent-glow: rgba(255,183,135,0.10);
+  }
+
+  .course-home {
+    position: fixed; top: 12px; left: 56px; z-index: 40;
+    font-family: monospace; font-size: 11px; letter-spacing: .08em; text-transform: uppercase;
+    color: var(--peach); background: var(--accent-glow); border: 1px solid var(--peach);
+    border-radius: 4px; padding: 4px 9px; text-decoration: none;
+  }
+  .course-home:hover { opacity: .8; }
+  .reveal .slides section { text-align: left; }
+  .reveal { font-size: 30px; }
+  .reveal h1, .reveal h2, .reveal h3 { text-align: left; }
+
+  .label {
+    display: block;
+    font-size: 0.5em;
+    letter-spacing: 3px;
+    font-weight: 700;
+    text-transform: uppercase;
+    margin: 0 0 14px 0;
+  }
+
+  .slide-menu-button { color: var(--peach) !important; }
+  .slide-menu-button .fa-bars::before { color: var(--peach); }
+  #slide-menu { background: #0a0a0a !important; }
+  .slide-menu-item a { font-size: 0.8em !important; }
+
+  .reveal .controls { color: var(--peach); }
+  .label.scenario { color: var(--amber); }
+  .label.mechanism { color: var(--blue); }
+  .label.gotcha { color: var(--red); }
+  .label.connection { color: var(--green); }
+  .label.angle { color: var(--purple); }
+  .label.recall { color: var(--green); }
+
+  .block { border-top: 1px solid #333; padding-top: 24px; margin-top: 24px; }
+  .block:first-of-type { border-top: none; margin-top: 0; padding-top: 0; }
+
+  .prose { font-size: 0.68em; line-height: 1.5; color: #e8e8e8; }
+  .prose b { color: #fff; }
+
+  .quotebox {
+    background: #161616;
+    border: 1px solid #333;
+    border-left: 4px solid var(--blue);
+    border-radius: 6px;
+    padding: 18px 24px;
+    font-family: 'Courier New', monospace;
+    font-size: 0.55em;
+    color: var(--blue);
+    margin: 18px 0;
+  }
+
+  .badge {
+    display: inline-block;
+    background: #1e2a3a;
+    color: var(--blue);
+    font-size: 0.4em;
+    padding: 4px 14px;
+    border-radius: 14px;
+    letter-spacing: 1px;
+    vertical-align: middle;
+    margin-left: 16px;
+  }
+
+  .titleslide h1 { font-size: 1.6em; margin-bottom: 10px; }
+  .titleslide .sub { font-size: 0.6em; color: #999; }
+  .titleslide .crumb { font-size: 0.45em; color: #666; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 20px; }
+
+  .recallbox {
+    background: #10201a;
+    border: 1px solid #235;
+    border-left: 4px solid var(--green);
+    border-radius: 6px;
+    padding: 22px 28px;
+    font-size: 0.65em;
+    line-height: 1.5;
+  }
+  .source { font-size: 0.32em; color: #666; margin-top: 20px; }
+
+  .navlink { font-size: 0.4em; color: var(--peach); text-decoration: none; letter-spacing: 1px; }
+  .navlink:hover { text-decoration: underline; }
+  .navlink.back { display: block; margin-top: 24px; }
+  .navlink.next { display: block; margin-top: 16px; }
+</style>
+</head>
+<body>
+<a class="course-home" href="../../index.html">← Course Home</a>
+<div class="reveal">
+<div class="slides">
+
+<section class="titleslide">
+  <div class="crumb">Okta Certified Administrator · Part I</div>
+  <h1>Identity and Access Management</h1>
+  <p class="sub">36% of the exam — the single largest domain.</p>
+</section>
+
+<section class="titleslide">
+  <div class="crumb">Identity &amp; Access Management</div>
+  <h1>Module 1: Active Directory Integration</h1>
+  <p class="sub">6 sub-topics · this deck covers sub-topic 5 of 6</p>
+  <a class="navlink back" href="submodule4-ad-password-policies.html">&larr; Back to Sub 4: Password Policies</a>
+  <a class="navlink back" href="index.html">&uarr; Module 1 Overview</a>
+</section>
+
+<section>
+  <h2 class="label scenario">The Exam Bullet</h2>
+  <div class="quotebox">
+    "Demonstrate knowledge of user activation options when using AD as a source"
+  </div>
+  <p class="prose">When AD is the source, a user doesn't just "appear" active in Okta. There's a real path from existing in AD to being active in Okta — and admins have choices over how that path plays out.</p>
+</section>
+
+<section>
+  <h2 class="label mechanism">The Mechanism — Two Activation Paths</h2>
+  <p class="prose">The standard path: AD-sourced users don't get sent Okta's usual activation email, and an <b>admin manually activates</b> them instead.</p>
+  <div class="block">
+    <p class="prose">The other path is <b>Just-In-Time provisioning</b>, covered back in Submodule 1 — the profile is created (and later updated) automatically the moment a user successfully authenticates against AD, no admin step required.</p>
+  </div>
+</section>
+
+<section>
+  <h2 class="label mechanism">The Mechanism — Import Matching Rules</h2>
+  <p class="prose">When AD users are imported, Okta has to decide whether an incoming record matches an existing Okta user. There are three settings for this:</p>
+  <div class="block"><p class="prose"><b>Auto-confirm exact matches</b> — username, email, or a specified attribute lines up exactly.</p></div>
+  <div class="block"><p class="prose"><b>Auto-confirm partial matches</b> — first and last name match, even if username or email differ.</p></div>
+  <div class="block"><p class="prose"><b>Manual confirmation</b> — if neither auto-confirm option is on, an admin has to verify the match by hand on the People page.</p></div>
+</section>
+
+<section>
+  <h2 class="label mechanism">The Mechanism — Account Status Propagation</h2>
+  <p class="prose">The <b>"Profile &amp; Lifecycle Sourcing"</b> settings decide how deactivation and reactivation move between the two systems.</p>
+  <div class="block">
+    <p class="prose">When a user is deactivated in Okta, the admin chooses what happens in AD: <b>deactivate</b> the AD account, <b>suspend</b> it, or <b>leave it unchanged</b>. Going the other direction, reactivating a user in AD can be configured to restore a suspended or deactivated Okta user.</p>
+  </div>
+</section>
+
+<section>
+  <h2 class="label gotcha">The Gotcha — Incremental Import Timing</h2>
+  <p class="prose">Users and groups are tracked <b>separately</b> during incremental imports. That means a user who was just imported can temporarily have <b>incomplete group memberships</b> — the user record landed, but their groups haven't fully caught up yet.</p>
+  <div class="block">
+    <p class="prose">JIT sidesteps this entirely: since the profile (and its group data) gets built at the moment of first login instead of waiting on an import cycle, there's no partial state to land in.</p>
+  </div>
+</section>
+
+<section>
+  <h2 class="label angle">The Exam Angle</h2>
+  <p class="prose">Watch for scenario questions built around these exact traps:</p>
+  <div class="block"><p class="prose">→ "A newly imported AD user exists in Okta but is missing from groups they should be in." <b>= incremental import timing gap, not a real misconfiguration.</b></p></div>
+  <div class="block"><p class="prose">→ "Two AD records with different usernames got merged into one Okta profile." <b>= partial-match auto-confirm behavior (first/last name matched).</b></p></div>
+</section>
+
+<section>
+  <h2 class="label recall">One Line To Remember</h2>
+  <div class="recallbox">
+    Two activation paths: admin manually activates AD-sourced users, or JIT auto-creates them at first login. Import matching = exact auto-confirm, partial (name-based) auto-confirm, or manual. Profile & Lifecycle Sourcing settings control deactivation/reactivation propagation both directions. Incremental imports can leave a new user's groups temporarily incomplete — JIT avoids that gap entirely.
+  </div>
+  <p class="source">Sources: help.okta.com — ad-agent-configure-import.htm · ad-agent-manage-integration.htm</p>
+  <a class="navlink next" href="submodule6-ad-vs-okta-groups.html">Next: Sub 6 &rarr;</a>
+</section>
+
+</div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@4.6.1/dist/reveal.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js-menu@2.1.0/menu.js"></script>
+<script>
+  Reveal.initialize({
+    hash: true,
+    slideNumber: true,
+    transition: 'slide',
+    width: 1200,
+    height: 700,
+    plugins: [ RevealMenu ],
+    menu: {
+      titleSelector: 'h1, h2',
+      useTextContentForMissingTitles: true,
+      markers: true,
+      openButton: true,
+      openSlideNumber: false,
+      keyboard: true,
+      themes: false,
+      transitions: false,
+      themesPath: '',
+      openOnInit: false
+    }
+  });
+</script>
+</body>
+</html>

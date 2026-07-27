@@ -1,0 +1,221 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="color-scheme" content="dark">
+<title>IAM > AD Integration > Delegated Auth</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.6.1/dist/reveal.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.6.1/dist/theme/black.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js-menu@2.1.0/menu.css">
+<style>
+  :root {
+    --amber:#f5a623; --red:#ff5c5c; --green:#3ddc84; --purple:#bb86fc; --blue:#5fb3ff; --peach:#ffb787;
+    --accent-glow: rgba(255,183,135,0.10);
+  }
+
+  .course-home {
+    position: fixed; top: 12px; left: 56px; z-index: 40;
+    font-family: monospace; font-size: 11px; letter-spacing: .08em; text-transform: uppercase;
+    color: var(--peach); background: var(--accent-glow); border: 1px solid var(--peach);
+    border-radius: 4px; padding: 4px 9px; text-decoration: none;
+  }
+  .course-home:hover { opacity: .8; }
+  .reveal .slides section { text-align: left; }
+  .reveal { font-size: 30px; }
+  .reveal h1, .reveal h2, .reveal h3 { text-align: left; }
+
+  .label {
+    display: block;
+    font-size: 0.5em;
+    letter-spacing: 3px;
+    font-weight: 700;
+    text-transform: uppercase;
+    margin: 0 0 14px 0;
+  }
+
+  .slide-menu-button { color: var(--peach) !important; }
+  .slide-menu-button .fa-bars::before { color: var(--peach); }
+  #slide-menu { background: #0a0a0a !important; }
+  .slide-menu-item a { font-size: 0.8em !important; }
+
+  .reveal .controls { color: var(--peach); }
+  .label.scenario { color: var(--amber); }
+  .label.mechanism { color: var(--blue); }
+  .label.gotcha { color: var(--red); }
+  .label.connection { color: var(--green); }
+  .label.angle { color: var(--purple); }
+  .label.recall { color: var(--green); }
+
+  .block { border-top: 1px solid #333; padding-top: 24px; margin-top: 24px; }
+  .block:first-of-type { border-top: none; margin-top: 0; padding-top: 0; }
+
+  .prose { font-size: 0.68em; line-height: 1.5; color: #e8e8e8; }
+  .prose b { color: #fff; }
+
+  .quotebox {
+    background: #161616;
+    border: 1px solid #333;
+    border-left: 4px solid var(--blue);
+    border-radius: 6px;
+    padding: 18px 24px;
+    font-family: 'Courier New', monospace;
+    font-size: 0.55em;
+    color: var(--blue);
+    margin: 18px 0;
+  }
+
+  .badge {
+    display: inline-block;
+    background: #1e2a3a;
+    color: var(--blue);
+    font-size: 0.4em;
+    padding: 4px 14px;
+    border-radius: 14px;
+    letter-spacing: 1px;
+    vertical-align: middle;
+    margin-left: 16px;
+  }
+
+  .titleslide h1 { font-size: 1.6em; margin-bottom: 10px; }
+  .titleslide .sub { font-size: 0.6em; color: #999; }
+  .titleslide .crumb { font-size: 0.45em; color: #666; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 20px; }
+
+  .recallbox {
+    background: #10201a;
+    border: 1px solid #235;
+    border-left: 4px solid var(--green);
+    border-radius: 6px;
+    padding: 22px 28px;
+    font-size: 0.65em;
+    line-height: 1.5;
+  }
+  .source { font-size: 0.32em; color: #666; margin-top: 20px; }
+
+  .navlink { font-size: 0.4em; color: var(--peach); text-decoration: none; letter-spacing: 1px; }
+  .navlink:hover { text-decoration: underline; }
+  .navlink.next { display: block; margin-top: 16px; }
+</style>
+</head>
+<body>
+<a class="course-home" href="../../index.html">← Course Home</a>
+<div class="reveal">
+<div class="slides">
+
+<section class="titleslide">
+  <div class="crumb">Okta Certified Administrator · Part I</div>
+  <h1>Identity and Access Management</h1>
+  <p class="sub">36% of the exam — the single largest domain.</p>
+</section>
+
+<section class="titleslide">
+  <div class="crumb">Identity &amp; Access Management</div>
+  <h1>Module 1: Active Directory Integration</h1>
+  <p class="sub">6 sub-topics · this deck covers sub-topic 1 of 6</p>
+  <a class="navlink back" href="index.html">&uarr; Module 1 Overview</a>
+</section>
+
+<section>
+  <h2 class="label scenario">The Exam Bullet</h2>
+  <div class="quotebox">
+    "Enable and manage delegated authentication with AD and LDAP using Okta agents"
+  </div>
+  <p class="prose">A company already has real Active Directory or LDAP accounts. They don't want two separate password systems. This sub-topic is about how Okta lets people log in with their <b>existing AD/LDAP password</b> — without Okta ever storing a copy of it.</p>
+</section>
+
+<section>
+  <h2 class="label mechanism">The Mechanism</h2>
+  <p class="prose">When a user tries to sign in, Okta doesn't check its own password store. Instead it <b>forwards the login attempt</b> to the customer's real AD or LDAP server through the <b>Okta Agent</b>, and asks one question: "is this password correct?" Okta trusts whatever answer comes back.</p>
+  <div class="block">
+    <p class="prose">That's what "delegated" means — Okta <b>delegates</b> the actual authentication decision to the directory that already owns the password.</p>
+  </div>
+</section>
+
+<section>
+  <h2 class="label mechanism">The Default Behavior</h2>
+  <div class="quotebox">LDAP → delegated auth is ON by default the moment you add an LDAP integration.</div>
+  <div class="quotebox" style="border-left-color:var(--amber); color:var(--amber);">AD → must be explicitly enabled and managed via Security &gt; Delegated Authentication.</div>
+  <p class="prose">This asymmetry is a classic place for an exam question to trip you up.</p>
+</section>
+
+<section>
+  <h2 class="label gotcha">The Requirement Everyone Forgets</h2>
+  <p class="prose">Letting users <b>reset</b> an expired password through delegated auth isn't automatic. Two things have to be true first:</p>
+  <div class="block">
+    <p class="prose">1. The <b>Okta LDAP Agent</b> must be version <b>5.3.0 or later</b>.</p>
+  </div>
+  <div class="block">
+    <p class="prose">2. The directory must support the <b>pwdReset attribute</b>, so Okta actually knows a password has expired and must be changed at next login.</p>
+  </div>
+</section>
+
+<section>
+  <h2 class="label gotcha">The Lockout Trap</h2>
+  <p class="prose">Okta and AD each track failed login attempts <b>separately</b>. If their thresholds don't line up, users get confusing lockouts that don't match what IT sees in AD.</p>
+  <div class="quotebox" style="border-left-color:var(--red); color:var(--red);">Rule of thumb: set Okta's lockout limit to no more than <b>half</b> of the AD/LDAP lockout limit.</div>
+  <p class="prose">Also: self-service unlock works for Okta-sourced accounts — but an <b>LDAP-sourced account needs an admin</b> to unlock it.</p>
+</section>
+
+<section>
+  <h2 class="label connection">The Connection to JIT</h2>
+  <p class="prose">Delegated authentication isn't just about logins — it's the <b>gatekeeper</b> for Just-In-Time (JIT) provisioning.</p>
+  <div class="block">
+    <p class="prose">A brand-new AD user, never imported into Okta, signs in for the <b>first time</b>. Delegated auth confirms the password against AD. Because it succeeded, Okta <b>silently creates the user's profile</b> right then — no activation email sent.</p>
+  </div>
+  <div class="block">
+    <p class="prose">No delegated auth → no JIT. They're a package deal.</p>
+  </div>
+</section>
+
+<section>
+  <h2 class="label gotcha">The Reliability Risk</h2>
+  <p class="prose">Every delegated-auth login has to round-trip through an Okta Agent to reach AD/LDAP. If there aren't <b>enough agents</b> for the login volume, requests queue up — real users experience slow or failed logins.</p>
+  <div class="block">
+    <p class="prose">This is why the exam tests <b>agent high-availability</b> as its own related topic later in this same module.</p>
+  </div>
+</section>
+
+<section>
+  <h2 class="label angle">The Exam Angle</h2>
+  <p class="prose">Watch for scenario questions built around these exact traps:</p>
+  <div class="block"><p class="prose">→ "New AD users can log in, but nothing shows up in Okta until they do." <b>= JIT + delegated auth.</b></p></div>
+  <div class="block"><p class="prose">→ "Users report random lockouts that don't match AD." <b>= lockout ratio misconfiguration.</b></p></div>
+  <div class="block"><p class="prose">→ "Password reset doesn't work over delegated auth." <b>= check agent version / pwdReset support.</b></p></div>
+</section>
+
+<section>
+  <h2 class="label recall">One Line To Remember</h2>
+  <div class="recallbox">
+    Delegated auth = Okta asks AD/LDAP "is this password right?" instead of storing it. LDAP: on by default. AD: manual. Needs agent v5.3.0+ for resets. Set Okta's lockout ≤ half of AD's. It's the prerequisite for JIT.
+  </div>
+  <p class="source">Sources: help.okta.com — Security_Authentication.htm · configure-password.htm · ad-agent-add-update-JIT.htm</p>
+  <a class="navlink next" href="submodule2-agent-architecture.html">Next: Sub 2 &rarr;</a>
+</section>
+
+</div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@4.6.1/dist/reveal.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js-menu@2.1.0/menu.js"></script>
+<script>
+  Reveal.initialize({
+    hash: true,
+    slideNumber: true,
+    transition: 'slide',
+    width: 1200,
+    height: 700,
+    plugins: [ RevealMenu ],
+    menu: {
+      titleSelector: 'h1, h2',
+      useTextContentForMissingTitles: true,
+      markers: true,
+      openButton: true,
+      openSlideNumber: false,
+      keyboard: true,
+      themes: false,
+      transitions: false,
+      themesPath: '',
+      openOnInit: false
+    }
+  });
+</script>
+</body>
+</html>

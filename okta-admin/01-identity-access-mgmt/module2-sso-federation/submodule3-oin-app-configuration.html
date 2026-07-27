@@ -1,0 +1,199 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="color-scheme" content="dark">
+<title>IAM > SSO Federation > OIN App Configuration</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.6.1/dist/reveal.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.6.1/dist/theme/black.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js-menu@2.1.0/menu.css">
+<style>
+  :root {
+    --amber:#f5a623; --red:#ff5c5c; --green:#3ddc84; --purple:#bb86fc; --blue:#5fb3ff; --peach:#ffb787;
+    --accent-glow: rgba(255,183,135,0.10);
+  }
+
+  .course-home {
+    position: fixed; top: 12px; left: 56px; z-index: 40;
+    font-family: monospace; font-size: 11px; letter-spacing: .08em; text-transform: uppercase;
+    color: var(--peach); background: var(--accent-glow); border: 1px solid var(--peach);
+    border-radius: 4px; padding: 4px 9px; text-decoration: none;
+  }
+  .course-home:hover { opacity: .8; }
+
+  .reveal .slides section { text-align: left; }
+  .reveal { font-size: 30px; }
+  .reveal h1, .reveal h2, .reveal h3 { text-align: left; }
+
+  .label {
+    display: block;
+    font-size: 0.5em;
+    letter-spacing: 3px;
+    font-weight: 700;
+    text-transform: uppercase;
+    margin: 0 0 14px 0;
+  }
+
+  .slide-menu-button { color: var(--peach) !important; }
+  .slide-menu-button .fa-bars::before { color: var(--peach); }
+  #slide-menu { background: #0a0a0a !important; }
+  .slide-menu-item a { font-size: 0.8em !important; }
+
+  .reveal .controls { color: var(--peach); }
+  .label.scenario { color: var(--amber); }
+  .label.mechanism { color: var(--blue); }
+  .label.gotcha { color: var(--red); }
+  .label.connection { color: var(--green); }
+  .label.angle { color: var(--purple); }
+  .label.recall { color: var(--green); }
+
+  .block { border-top: 1px solid #333; padding-top: 24px; margin-top: 24px; }
+  .block:first-of-type { border-top: none; margin-top: 0; padding-top: 0; }
+
+  .prose { font-size: 0.68em; line-height: 1.5; color: #e8e8e8; }
+  .prose b { color: #fff; }
+
+  .quotebox {
+    background: #161616;
+    border: 1px solid #333;
+    border-left: 4px solid var(--blue);
+    border-radius: 6px;
+    padding: 18px 24px;
+    font-family: 'Courier New', monospace;
+    font-size: 0.55em;
+    color: var(--blue);
+    margin: 18px 0;
+  }
+
+  .titleslide h1 { font-size: 1.6em; margin-bottom: 10px; }
+  .titleslide .sub { font-size: 0.6em; color: #999; }
+  .titleslide .crumb { font-size: 0.45em; color: #666; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 20px; }
+
+  .recallbox {
+    background: #10201a;
+    border: 1px solid #235;
+    border-left: 4px solid var(--green);
+    border-radius: 6px;
+    padding: 22px 28px;
+    font-size: 0.65em;
+    line-height: 1.5;
+  }
+  .source { font-size: 0.32em; color: #666; margin-top: 20px; }
+
+  .navlink { font-size: 0.4em; color: var(--peach); text-decoration: none; letter-spacing: 1px; }
+  .navlink:hover { text-decoration: underline; }
+  .navlink.back { display: block; margin-top: 24px; }
+  .navlink.next { display: block; margin-top: 16px; }
+</style>
+</head>
+<body>
+<a class="course-home" href="../../index.html">← Course Home</a>
+<div class="reveal">
+<div class="slides">
+
+<section class="titleslide">
+  <div class="crumb">Okta Certified Administrator · Part I</div>
+  <h1>Identity and Access Management</h1>
+  <p class="sub">36% of the exam — the single largest domain.</p>
+</section>
+
+<section class="titleslide">
+  <div class="crumb">Identity &amp; Access Management</div>
+  <h1>Module 2: Single Sign-On (SSO) Federation</h1>
+  <p class="sub">4 sub-topics · this deck covers sub-topic 3 of 4</p>
+  <a class="navlink back" href="index.html">&uarr; Module 2 Overview</a>
+</section>
+
+<section>
+  <h2 class="label scenario">The Exam Bullet</h2>
+  <div class="quotebox">
+    "Demonstrate knowledge of the configuration of OIN apps"
+  </div>
+  <p class="prose">The Okta Integration Network (OIN) is the catalog of app connections Okta already knows how to talk to. This sub-topic covers what's actually configurable once one of those apps is added — not just clicking "assign."</p>
+</section>
+
+<section>
+  <h2 class="label mechanism">The Mechanism</h2>
+  <p class="prose">An OIN app integration is a <b>configured connection between an Okta feature and an external app</b> — either a prebuilt catalog entry or a custom connection using <b>SAML, OIDC, or Secure Web Authentication</b>. Account provisioning between the two can be handled through <b>SCIM</b>.</p>
+  <div class="block">
+    <p class="prose">Once configured, admins can assign the integration to groups or individuals, enable SSO, and keep account data synchronized both ways.</p>
+  </div>
+</section>
+
+<section>
+  <h2 class="label gotcha">The Gotcha — CASB Override</h2>
+  <p class="prose">A Cloud Access Security Broker (CASB) sits between the org and its cloud apps to enforce security policy. Okta lets you override <b>four SAML properties</b> on OIN/Office 365 apps to make that integration work, all inside the <code>$app.settings.signOn</code> object:</p>
+  <div class="quotebox">
+    ssoAcsUrlOverride — Assertion Consumer Service URL<br>
+    audienceOverride — Audience<br>
+    destinationOverride — Destination<br>
+    recipientOverride — Recipient
+  </div>
+  <p class="prose">These are set via the Okta API (fetch app settings, edit the <code>signOn</code> section, then PUT the update). For Office 365 specifically, <b>WS-Federation must be set to Manual</b> configuration to avoid errors with multiple domain federation.</p>
+</section>
+
+<section>
+  <h2 class="label gotcha">The Gotcha — Password Reveal</h2>
+  <p class="prose">Admins must <b>explicitly enable</b> Password Reveal per app — it's off by default, and it's <b>unavailable</b> for apps using admin-set or shared credentials.</p>
+  <div class="quotebox" style="border-left-color:var(--red); color:var(--red);">
+    Revealed password auto-hides after 1 minute · reauthentication required if 15+ minutes since login · transmission uses SSL
+  </div>
+  <p class="prose">Credentials are stored encrypted with a tenant-specific private key. The feature exists specifically for cases like re-entering a long generated password on another device — but only for individually-assigned credentials, never shared ones.</p>
+</section>
+
+<section>
+  <h2 class="label gotcha">The Gotcha — Self-Service Approval Workflow</h2>
+  <p class="prose">This lets app owners (not just IT) manage access requests. Requires <b>Super or app admin</b> rights, plus Self-Service enabled org-wide.</p>
+  <div class="block">
+    <p class="prose">Configuration: turn on "Allow user to request app," optionally require approval, assign approvers (<b>max 100 per group</b>) with Hidden/Read/Write rights, chain up to <b>10 approval levels</b> without repeating an approver, and set a response window (1 week, 30 days, or custom).</p>
+  </div>
+  <div class="block">
+    <p class="prose">Key limitation: this workflow <b>can't be used with apps that require personal attributes</b>. Best practice: make sure at least one approver can edit attributes if the app needs provisioning setup.</p>
+  </div>
+</section>
+
+<section>
+  <h2 class="label angle">The Exam Angle</h2>
+  <p class="prose">Watch for scenario questions built around these traps:</p>
+  <div class="block"><p class="prose">→ "A CASB proxy needs a different Assertion Consumer Service URL than the default OIN app uses." <b>= ssoAcsUrlOverride via the API.</b></p></div>
+  <div class="block"><p class="prose">→ "A user can't reveal their password for a shared-credential app." <b>= expected — Password Reveal doesn't work for shared credentials.</b></p></div>
+  <div class="block"><p class="prose">→ "An app with required personal attributes needs a self-service request flow." <b>= not supported — explicit limitation.</b></p></div>
+</section>
+
+<section>
+  <h2 class="label recall">One Line To Remember</h2>
+  <div class="recallbox">
+    OIN apps = prebuilt or custom (SAML/OIDC/SWA) connections, SCIM for provisioning. CASB override = 4 signOn properties via API (ACS URL, audience, destination, recipient). Password Reveal = admin-enabled, 1-min auto-hide, 15-min reauth, never for shared creds. Self-Service Approval = up to 10 levels, 100 approvers/group, can't combine with apps needing personal attributes.
+  </div>
+  <p class="source">Sources: help.okta.com — Apps_Apps.htm · CASB-config-guide.htm · Apps_Revealing_the_Password.htm · apps-selfservice-configureapprovalflow.htm</p>
+  <a class="navlink next" href="submodule4-org2org-use-cases.html">Next: Sub 4 &rarr;</a>
+</section>
+
+</div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@4.6.1/dist/reveal.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js-menu@2.1.0/menu.js"></script>
+<script>
+  Reveal.initialize({
+    hash: true,
+    slideNumber: true,
+    transition: 'slide',
+    width: 1200,
+    height: 700,
+    plugins: [ RevealMenu ],
+    menu: {
+      titleSelector: 'h1, h2',
+      useTextContentForMissingTitles: true,
+      markers: true,
+      openButton: true,
+      openSlideNumber: false,
+      keyboard: true,
+      themes: false,
+      transitions: false,
+      themesPath: '',
+      openOnInit: false
+    }
+  });
+</script>
+</body>
+</html>

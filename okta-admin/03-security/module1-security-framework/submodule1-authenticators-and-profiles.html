@@ -1,0 +1,121 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="color-scheme" content="dark">
+<title>Security > Framework > Authenticators & Profiles</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.6.1/dist/reveal.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.6.1/dist/theme/black.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js-menu@2.1.0/menu.css">
+<style>
+  :root {
+    --amber:#f5a623; --red:#ff5c5c; --green:#3ddc84; --purple:#bb86fc; --blue:#5fb3ff; --peach:#ffb787;
+    --accent-glow: rgba(255,183,135,0.10);
+  }
+  .course-home { position: fixed; top: 12px; left: 56px; z-index: 40; font-family: monospace; font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--peach); background: var(--accent-glow); border: 1px solid var(--peach); border-radius: 4px; padding: 4px 9px; text-decoration: none; }
+  .course-home:hover { opacity: .8; }
+  .reveal .slides section { text-align: left; }
+  .reveal { font-size: 30px; }
+  .reveal h1, .reveal h2, .reveal h3 { text-align: left; }
+  .label { display: block; font-size: 0.5em; letter-spacing: 3px; font-weight: 700; text-transform: uppercase; margin: 0 0 14px 0; }
+  .slide-menu-button { color: var(--peach) !important; }
+  .slide-menu-button .fa-bars::before { color: var(--peach); }
+  #slide-menu { background: #0a0a0a !important; }
+  .slide-menu-item a { font-size: 0.8em !important; }
+  .reveal .controls { color: var(--peach); }
+  .label.scenario { color: var(--amber); }
+  .label.mechanism { color: var(--blue); }
+  .label.gotcha { color: var(--red); }
+  .label.connection { color: var(--green); }
+  .label.angle { color: var(--purple); }
+  .label.recall { color: var(--green); }
+  .block { border-top: 1px solid #333; padding-top: 24px; margin-top: 24px; }
+  .block:first-of-type { border-top: none; margin-top: 0; padding-top: 0; }
+  .prose { font-size: 0.68em; line-height: 1.5; color: #e8e8e8; }
+  .prose b { color: #fff; }
+  .quotebox { background: #161616; border: 1px solid #333; border-left: 4px solid var(--blue); border-radius: 6px; padding: 18px 24px; font-family: 'Courier New', monospace; font-size: 0.55em; color: var(--blue); margin: 18px 0; }
+  .titleslide h1 { font-size: 1.6em; margin-bottom: 10px; }
+  .titleslide .sub { font-size: 0.6em; color: #999; }
+  .titleslide .crumb { font-size: 0.45em; color: #666; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 20px; }
+  .recallbox { background: #10201a; border: 1px solid #235; border-left: 4px solid var(--green); border-radius: 6px; padding: 22px 28px; font-size: 0.65em; line-height: 1.5; }
+  .source { font-size: 0.32em; color: #666; margin-top: 20px; }
+  .navlink { font-size: 0.4em; color: var(--peach); text-decoration: none; letter-spacing: 1px; }
+  .navlink:hover { text-decoration: underline; }
+  .navlink.back { display: block; margin-top: 24px; }
+  .navlink.next { display: block; margin-top: 16px; }
+</style>
+</head>
+<body>
+<a class="course-home" href="../../index.html">← Course Home</a>
+<div class="reveal">
+<div class="slides">
+
+<section class="titleslide">
+  <div class="crumb">Okta Certified Administrator · Part I</div>
+  <h1>Security</h1>
+  <p class="sub">20% of the exam — the third-largest domain.</p>
+</section>
+
+<section class="titleslide">
+  <div class="crumb">Security</div>
+  <h1>Module 1: Okta Security Policy &amp; Enforcement Framework</h1>
+  <p class="sub">7 sub-topics · this deck covers sub-topic 1 of 7</p>
+  <a class="navlink back" href="index.html">&uarr; Module 1 Overview</a>
+</section>
+
+<section>
+  <h2 class="label scenario">The Exam Bullet</h2>
+  <div class="quotebox">
+    "Manage authenticators and profiles"
+  </div>
+  <p class="prose">MFA isn't one thing in Okta — it's a whole catalog of interchangeable factors, each with its own security properties. This sub-topic is about knowing that catalog and how to configure it.</p>
+</section>
+
+<section>
+  <h2 class="label mechanism">The Mechanism — Factor Categories</h2>
+  <p class="prose">Every authenticator falls into one of three categories:</p>
+  <div class="quotebox">Possession — something the user owns (phone, email account)<br>Knowledge — something the user knows (password, security question)<br>Biometric — a physical attribute a device can scan (fingerprint, face)</div>
+</section>
+
+<section>
+  <h2 class="label mechanism">Method Properties</h2>
+  <p class="prose">Authenticators are also described by security properties, independent of category:</p>
+  <div class="quotebox">Device-bound · Hardware-protected · Phishing-resistant · User presence · User verifying</div>
+  <p class="prose">Okta offers <b>15+ authenticator options</b>: passwords, security questions, email, phone, Smart Cards, YubiKey OTP, Okta Verify, Passkeys (FIDO2 WebAuthn), Duo Security, Google Authenticator, and temporary access codes, among others.</p>
+</section>
+
+<section>
+  <h2 class="label mechanism">Okta Verify Specifics</h2>
+  <div class="block"><p class="prose">Admin setup: Security &gt; Authenticators &gt; add the Okta Verify tile &gt; set an <b>enrollment policy</b> marking it <b>Optional or Required</b>.</p></div>
+  <div class="block"><p class="prose">Desktop support (macOS/Windows) is <b>Identity Engine-only</b>. Okta Verify is <b>incompatible with Windows Autopilot's out-of-box experience (OOBE)</b>.</p></div>
+  <div class="block"><p class="prose">Admins also control <b>release management</b> (automatic app updates) and <b>risk scoring</b> (triggering extra authentication based on sign-in risk).</p></div>
+</section>
+
+<section>
+  <h2 class="label angle">The Exam Angle</h2>
+  <p class="prose">Watch for scenario questions built around this trap:</p>
+  <div class="block"><p class="prose">→ "Okta Verify needs to run during a Windows Autopilot device provisioning flow." <b>= not compatible — known limitation.</b></p></div>
+</section>
+
+<section>
+  <h2 class="label recall">One Line To Remember</h2>
+  <div class="recallbox">
+    Authenticators split into 3 factor categories (possession/knowledge/biometric) with 5 method properties (device-bound, hardware-protected, phishing-resistant, user presence, user verifying). 15+ options exist. Okta Verify: Optional/Required enrollment policy, OIE-only desktop support, incompatible with Windows Autopilot OOBE.
+  </div>
+  <p class="source">Sources: help.okta.com — about-authenticators.htm · configure-okta-verify.htm</p>
+  <a class="navlink next" href="submodule2-global-session-policies.html">Next: Sub 2 &rarr;</a>
+</section>
+
+</div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@4.6.1/dist/reveal.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js-menu@2.1.0/menu.js"></script>
+<script>
+  Reveal.initialize({
+    hash: true, slideNumber: true, transition: 'slide', width: 1200, height: 700,
+    plugins: [ RevealMenu ],
+    menu: { titleSelector: 'h1, h2', useTextContentForMissingTitles: true, markers: true, openButton: true, openSlideNumber: false, keyboard: true, themes: false, transitions: false, themesPath: '', openOnInit: false }
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,186 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="color-scheme" content="dark">
+<title>IAM > Desktop SSO > Agentless Desktop SSO</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.6.1/dist/reveal.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.6.1/dist/theme/black.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js-menu@2.1.0/menu.css">
+<style>
+  :root {
+    --amber:#f5a623; --red:#ff5c5c; --green:#3ddc84; --purple:#bb86fc; --blue:#5fb3ff; --peach:#ffb787;
+    --accent-glow: rgba(255,183,135,0.10);
+  }
+
+  .course-home {
+    position: fixed; top: 12px; left: 56px; z-index: 40;
+    font-family: monospace; font-size: 11px; letter-spacing: .08em; text-transform: uppercase;
+    color: var(--peach); background: var(--accent-glow); border: 1px solid var(--peach);
+    border-radius: 4px; padding: 4px 9px; text-decoration: none;
+  }
+  .course-home:hover { opacity: .8; }
+
+  .reveal .slides section { text-align: left; }
+  .reveal { font-size: 30px; }
+  .reveal h1, .reveal h2, .reveal h3 { text-align: left; }
+
+  .label {
+    display: block;
+    font-size: 0.5em;
+    letter-spacing: 3px;
+    font-weight: 700;
+    text-transform: uppercase;
+    margin: 0 0 14px 0;
+  }
+
+  .slide-menu-button { color: var(--peach) !important; }
+  .slide-menu-button .fa-bars::before { color: var(--peach); }
+  #slide-menu { background: #0a0a0a !important; }
+  .slide-menu-item a { font-size: 0.8em !important; }
+
+  .reveal .controls { color: var(--peach); }
+  .label.scenario { color: var(--amber); }
+  .label.mechanism { color: var(--blue); }
+  .label.gotcha { color: var(--red); }
+  .label.connection { color: var(--green); }
+  .label.angle { color: var(--purple); }
+  .label.recall { color: var(--green); }
+
+  .block { border-top: 1px solid #333; padding-top: 24px; margin-top: 24px; }
+  .block:first-of-type { border-top: none; margin-top: 0; padding-top: 0; }
+
+  .prose { font-size: 0.68em; line-height: 1.5; color: #e8e8e8; }
+  .prose b { color: #fff; }
+
+  .quotebox {
+    background: #161616;
+    border: 1px solid #333;
+    border-left: 4px solid var(--blue);
+    border-radius: 6px;
+    padding: 18px 24px;
+    font-family: 'Courier New', monospace;
+    font-size: 0.55em;
+    color: var(--blue);
+    margin: 18px 0;
+  }
+
+  .titleslide h1 { font-size: 1.6em; margin-bottom: 10px; }
+  .titleslide .sub { font-size: 0.6em; color: #999; }
+  .titleslide .crumb { font-size: 0.45em; color: #666; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 20px; }
+
+  .recallbox {
+    background: #10201a;
+    border: 1px solid #235;
+    border-left: 4px solid var(--green);
+    border-radius: 6px;
+    padding: 22px 28px;
+    font-size: 0.65em;
+    line-height: 1.5;
+  }
+  .source { font-size: 0.32em; color: #666; margin-top: 20px; }
+
+  .navlink { font-size: 0.4em; color: var(--peach); text-decoration: none; letter-spacing: 1px; }
+  .navlink:hover { text-decoration: underline; }
+  .navlink.back { display: block; margin-top: 24px; }
+  .navlink.next { display: block; margin-top: 16px; }
+
+  .milestone { font-size: 0.4em; color: var(--green); letter-spacing: 1px; margin-top: 20px; }
+</style>
+</head>
+<body>
+<a class="course-home" href="../../index.html">← Course Home</a>
+<div class="reveal">
+<div class="slides">
+
+<section class="titleslide">
+  <div class="crumb">Okta Certified Administrator · Part I</div>
+  <h1>Identity and Access Management</h1>
+  <p class="sub">36% of the exam — the single largest domain.</p>
+</section>
+
+<section class="titleslide">
+  <div class="crumb">Identity &amp; Access Management</div>
+  <h1>Module 3: Desktop SSO Deployment Federation</h1>
+  <p class="sub">1 sub-topic · this deck covers the whole module</p>
+  <a class="navlink back" href="index.html">&uarr; Module 3 Overview</a>
+</section>
+
+<section>
+  <h2 class="label scenario">The Exam Bullet</h2>
+  <div class="quotebox">
+    "Demonstrate knowledge of how to deploy Agentless Desktop SSO"
+  </div>
+  <p class="prose">A user already logged into their Windows domain shouldn't have to log in again just to reach Okta. This sub-topic is about how Desktop Single Sign-on (DSSO) makes that automatic — without installing a dedicated agent for it.</p>
+</section>
+
+<section>
+  <h2 class="label mechanism">The Mechanism</h2>
+  <p class="prose">With <b>Desktop Single Sign-on (DSSO)</b>, a user is <b>automatically authenticated by Okta</b> the moment they sign in to the Windows network. From there, they reach Okta-connected applications without re-entering credentials.</p>
+  <div class="block">
+    <p class="prose">The "agentless" part matters: this doesn't require installing a separate DSSO agent — it works off the existing Windows domain sign-in itself.</p>
+  </div>
+</section>
+
+<section>
+  <h2 class="label mechanism">What The Documentation Covers</h2>
+  <p class="prose">Deploying this correctly touches several distinct areas, each with its own considerations:</p>
+  <div class="quotebox">Prerequisites · Known issues and limitations · Just-in-Time provisioning integration · Configuration steps for agentless deployment · Migration guidance from registry-key setups · Troubleshooting and FAQs</div>
+</section>
+
+<section>
+  <h2 class="label gotcha">The Gotcha — Registry Key Migration</h2>
+  <p class="prose">Organizations that were previously using <b>registry keys</b> to configure agentless SSO need to follow separate migration guidance to move to the current setup — it's not a drop-in replacement.</p>
+</section>
+
+<section>
+  <h2 class="label connection">The Connection to JIT</h2>
+  <p class="prose">DSSO's documentation explicitly covers <b>Just-in-Time provisioning</b> integration — the same JIT mechanism from Module 1, Submodule 1.</p>
+  <div class="block">
+    <p class="prose">The pattern repeats: a user authenticates through some trusted mechanism (there, delegated auth against AD; here, an already-authenticated Windows session), and Okta uses that successful authentication as the trigger to provision or update their profile.</p>
+  </div>
+</section>
+
+<section>
+  <h2 class="label angle">The Exam Angle</h2>
+  <p class="prose">Watch for scenario questions built around this trap:</p>
+  <div class="block"><p class="prose">→ "An org still has registry-key-based agentless SSO configured and wants to modernize it." <b>= follow the dedicated migration guidance, not a fresh install.</b></p></div>
+</section>
+
+<section>
+  <h2 class="label recall">One Line To Remember</h2>
+  <div class="recallbox">
+    DSSO = users get auto-authenticated by Okta on Windows domain sign-in, no separate agent needed, no re-entering credentials for connected apps. It integrates with JIT provisioning the same way delegated auth does. Orgs on old registry-key setups need a dedicated migration path, not a fresh reconfiguration.
+  </div>
+  <p class="source">Sources: help.okta.com — ad-desktop-sso-main.htm</p>
+  <p class="milestone">✓ Module 3: Desktop SSO Deployment Federation — complete (1 of 1 sub-topic)</p>
+</section>
+
+</div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@4.6.1/dist/reveal.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js-menu@2.1.0/menu.js"></script>
+<script>
+  Reveal.initialize({
+    hash: true,
+    slideNumber: true,
+    transition: 'slide',
+    width: 1200,
+    height: 700,
+    plugins: [ RevealMenu ],
+    menu: {
+      titleSelector: 'h1, h2',
+      useTextContentForMissingTitles: true,
+      markers: true,
+      openButton: true,
+      openSlideNumber: false,
+      keyboard: true,
+      themes: false,
+      transitions: false,
+      themesPath: '',
+      openOnInit: false
+    }
+  });
+</script>
+</body>
+</html>

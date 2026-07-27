@@ -1,0 +1,125 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="color-scheme" content="dark">
+<title>User Lifecycle > Profile Sourcing > Multiple Profile Sources</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.6.1/dist/reveal.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.6.1/dist/theme/black.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js-menu@2.1.0/menu.css">
+<style>
+  :root {
+    --amber:#f5a623; --red:#ff5c5c; --green:#3ddc84; --purple:#bb86fc; --blue:#5fb3ff; --peach:#ffb787;
+    --accent-glow: rgba(255,183,135,0.10);
+  }
+  .course-home { position: fixed; top: 12px; left: 56px; z-index: 40; font-family: monospace; font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--peach); background: var(--accent-glow); border: 1px solid var(--peach); border-radius: 4px; padding: 4px 9px; text-decoration: none; }
+  .course-home:hover { opacity: .8; }
+  .reveal .slides section { text-align: left; }
+  .reveal { font-size: 30px; }
+  .reveal h1, .reveal h2, .reveal h3 { text-align: left; }
+  .label { display: block; font-size: 0.5em; letter-spacing: 3px; font-weight: 700; text-transform: uppercase; margin: 0 0 14px 0; }
+  .slide-menu-button { color: var(--peach) !important; }
+  .slide-menu-button .fa-bars::before { color: var(--peach); }
+  #slide-menu { background: #0a0a0a !important; }
+  .slide-menu-item a { font-size: 0.8em !important; }
+  .reveal .controls { color: var(--peach); }
+  .label.scenario { color: var(--amber); }
+  .label.mechanism { color: var(--blue); }
+  .label.gotcha { color: var(--red); }
+  .label.connection { color: var(--green); }
+  .label.angle { color: var(--purple); }
+  .label.recall { color: var(--green); }
+  .block { border-top: 1px solid #333; padding-top: 24px; margin-top: 24px; }
+  .block:first-of-type { border-top: none; margin-top: 0; padding-top: 0; }
+  .prose { font-size: 0.68em; line-height: 1.5; color: #e8e8e8; }
+  .prose b { color: #fff; }
+  .quotebox { background: #161616; border: 1px solid #333; border-left: 4px solid var(--blue); border-radius: 6px; padding: 18px 24px; font-family: 'Courier New', monospace; font-size: 0.55em; color: var(--blue); margin: 18px 0; }
+  .titleslide h1 { font-size: 1.6em; margin-bottom: 10px; }
+  .titleslide .sub { font-size: 0.6em; color: #999; }
+  .titleslide .crumb { font-size: 0.45em; color: #666; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 20px; }
+  .recallbox { background: #10201a; border: 1px solid #235; border-left: 4px solid var(--green); border-radius: 6px; padding: 22px 28px; font-size: 0.65em; line-height: 1.5; }
+  .source { font-size: 0.32em; color: #666; margin-top: 20px; }
+  .navlink { font-size: 0.4em; color: var(--peach); text-decoration: none; letter-spacing: 1px; }
+  .navlink:hover { text-decoration: underline; }
+  .navlink.back { display: block; margin-top: 24px; }
+  .navlink.next { display: block; margin-top: 16px; }
+</style>
+</head>
+<body>
+<a class="course-home" href="../../index.html">← Course Home</a>
+<div class="reveal">
+<div class="slides">
+
+<section class="titleslide">
+  <div class="crumb">Okta Certified Administrator · Part I</div>
+  <h1>User Lifecycle Management</h1>
+  <p class="sub">29% of the exam — the second-largest domain.</p>
+</section>
+
+<section class="titleslide">
+  <div class="crumb">User Lifecycle Management</div>
+  <h1>Module 1: Profile Sourcing &amp; Write-Back Concepts</h1>
+  <p class="sub">6 sub-topics · this deck covers sub-topic 4 of 6</p>
+  <a class="navlink back" href="index.html">&uarr; Module 1 Overview</a>
+</section>
+
+<section>
+  <h2 class="label scenario">The Exam Bullet</h2>
+  <div class="quotebox">
+    "Demonstrate ability to work with multiple profile sources"
+  </div>
+  <p class="prose">Real orgs rarely have just one system of record. This sub-topic is about what actually happens — and what can go wrong — when more than one app claims to be a profile source for the same user.</p>
+</section>
+
+<section>
+  <h2 class="label mechanism">The Mechanism</h2>
+  <p class="prose">A <b>profile source</b> is "an app that acts as the source of truth for user identities." Once enabled, it can manage the full lifecycle — creation, updates, and deactivation.</p>
+  <div class="block">
+    <p class="prose">When multiple sources exist, Okta lets you set a <b>priority order</b> — but <b>only one profile source can serve a user's profile at any given time.</b> Priority decides which one wins.</p>
+  </div>
+</section>
+
+<section>
+  <h2 class="label gotcha">The Gotcha — Three Real Risks</h2>
+  <p class="prose">If both <b>Profile Source</b> and <b>Update User Attributes</b> are enabled on the same app, three specific things can go wrong:</p>
+  <div class="quotebox" style="border-left-color:var(--red); color:var(--red);">
+    1. Unwanted overwrites — Okta updates can replace unmapped attribute values, even from the highest-priority source.<br>
+    2. Attribute conflicts — updates can overwrite attributes sourced from other identity providers.<br>
+    3. Race conditions — outdated attribute combinations can get pushed if changes happen across systems at different times.
+  </div>
+</section>
+
+<section>
+  <h2 class="label mechanism">Matching Rules</h2>
+  <p class="prose">To prevent this from spiraling, <b>Okta uses matching rules to maintain a link between the profile source and Okta</b> — distinguishing a brand-new imported user from an update to an existing one.</p>
+</section>
+
+<section>
+  <h2 class="label angle">The Exam Angle</h2>
+  <p class="prose">Watch for scenario questions built around these traps:</p>
+  <div class="block"><p class="prose">→ "Two sources are both configured as the profile source for the same user." <b>= not possible — only one source can serve a profile at a time; priority order decides.</b></p></div>
+  <div class="block"><p class="prose">→ "An attribute from one IdP got silently overwritten." <b>= the attribute-conflict risk of enabling Profile Source + Update User Attributes together.</b></p></div>
+</section>
+
+<section>
+  <h2 class="label recall">One Line To Remember</h2>
+  <div class="recallbox">
+    Only one profile source can serve a user's profile at a time — priority order decides which. Combining Profile Source + Update User Attributes on one app risks unwanted overwrites, cross-IdP attribute conflicts, and race conditions. Matching rules distinguish new imports from existing-user updates.
+  </div>
+  <p class="source">Sources: help.okta.com — usgp-about-profile-sourcing.htm</p>
+  <a class="navlink next" href="submodule5-lifecycle-requirements.html">Next: Sub 5 &rarr;</a>
+</section>
+
+</div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@4.6.1/dist/reveal.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js-menu@2.1.0/menu.js"></script>
+<script>
+  Reveal.initialize({
+    hash: true, slideNumber: true, transition: 'slide', width: 1200, height: 700,
+    plugins: [ RevealMenu ],
+    menu: { titleSelector: 'h1, h2', useTextContentForMissingTitles: true, markers: true, openButton: true, openSlideNumber: false, keyboard: true, themes: false, transitions: false, themesPath: '', openOnInit: false }
+  });
+</script>
+</body>
+</html>

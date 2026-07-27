@@ -1,0 +1,183 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="color-scheme" content="dark">
+<title>IAM > Architecture > Agent High Availability</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.6.1/dist/reveal.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.6.1/dist/theme/black.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js-menu@2.1.0/menu.css">
+<style>
+  :root {
+    --amber:#f5a623; --red:#ff5c5c; --green:#3ddc84; --purple:#bb86fc; --blue:#5fb3ff; --peach:#ffb787;
+    --accent-glow: rgba(255,183,135,0.10);
+  }
+
+  .course-home {
+    position: fixed; top: 12px; left: 56px; z-index: 40;
+    font-family: monospace; font-size: 11px; letter-spacing: .08em; text-transform: uppercase;
+    color: var(--peach); background: var(--accent-glow); border: 1px solid var(--peach);
+    border-radius: 4px; padding: 4px 9px; text-decoration: none;
+  }
+  .course-home:hover { opacity: .8; }
+
+  .reveal .slides section { text-align: left; }
+  .reveal { font-size: 30px; }
+  .reveal h1, .reveal h2, .reveal h3 { text-align: left; }
+
+  .label {
+    display: block;
+    font-size: 0.5em;
+    letter-spacing: 3px;
+    font-weight: 700;
+    text-transform: uppercase;
+    margin: 0 0 14px 0;
+  }
+
+  .slide-menu-button { color: var(--peach) !important; }
+  .slide-menu-button .fa-bars::before { color: var(--peach); }
+  #slide-menu { background: #0a0a0a !important; }
+  .slide-menu-item a { font-size: 0.8em !important; }
+
+  .reveal .controls { color: var(--peach); }
+  .label.scenario { color: var(--amber); }
+  .label.mechanism { color: var(--blue); }
+  .label.gotcha { color: var(--red); }
+  .label.connection { color: var(--green); }
+  .label.angle { color: var(--purple); }
+  .label.recall { color: var(--green); }
+
+  .block { border-top: 1px solid #333; padding-top: 24px; margin-top: 24px; }
+  .block:first-of-type { border-top: none; margin-top: 0; padding-top: 0; }
+
+  .prose { font-size: 0.68em; line-height: 1.5; color: #e8e8e8; }
+  .prose b { color: #fff; }
+
+  .quotebox {
+    background: #161616;
+    border: 1px solid #333;
+    border-left: 4px solid var(--blue);
+    border-radius: 6px;
+    padding: 18px 24px;
+    font-family: 'Courier New', monospace;
+    font-size: 0.55em;
+    color: var(--blue);
+    margin: 18px 0;
+  }
+
+  .titleslide h1 { font-size: 1.6em; margin-bottom: 10px; }
+  .titleslide .sub { font-size: 0.6em; color: #999; }
+  .titleslide .crumb { font-size: 0.45em; color: #666; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 20px; }
+
+  .recallbox {
+    background: #10201a;
+    border: 1px solid #235;
+    border-left: 4px solid var(--green);
+    border-radius: 6px;
+    padding: 22px 28px;
+    font-size: 0.65em;
+    line-height: 1.5;
+  }
+  .source { font-size: 0.32em; color: #666; margin-top: 20px; }
+
+  .navlink { font-size: 0.4em; color: var(--peach); text-decoration: none; letter-spacing: 1px; }
+  .navlink:hover { text-decoration: underline; }
+  .navlink.back { display: block; margin-top: 24px; }
+  .navlink.next { display: block; margin-top: 16px; }
+
+  .milestone { font-size: 0.4em; color: var(--green); letter-spacing: 1px; margin-top: 20px; }
+</style>
+</head>
+<body>
+<a class="course-home" href="../../index.html">← Course Home</a>
+<div class="reveal">
+<div class="slides">
+
+<section class="titleslide">
+  <div class="crumb">Okta Certified Administrator · Part I</div>
+  <h1>Identity and Access Management</h1>
+  <p class="sub">36% of the exam — the single largest domain.</p>
+</section>
+
+<section class="titleslide">
+  <div class="crumb">Identity &amp; Access Management</div>
+  <h1>Module 4: Architecture</h1>
+  <p class="sub">2 sub-topics · this deck covers sub-topic 2 of 2 — the last one in this module</p>
+  <a class="navlink back" href="index.html">&uarr; Module 4 Overview</a>
+</section>
+
+<section>
+  <h2 class="label scenario">The Exam Bullet</h2>
+  <div class="quotebox">
+    "Demonstrate knowledge of high availability requirements on advanced agents (e.g., RADIUS, MFA, OPP)"
+  </div>
+  <p class="prose">Module 1 already covered HA for the AD agent specifically. This sub-topic asks whether that same principle — and its practical consequences — hold up across the other "advanced" agent types too.</p>
+</section>
+
+<section>
+  <h2 class="label connection">The Connection Back to Module 1</h2>
+  <p class="prose">The core HA rule doesn't change by agent type: run <b>2+ agents</b>, on <b>separate physical servers</b>, so one agent going down doesn't take down authentication. That principle — established for the AD agent in Module 1 — applies the same way to RADIUS, MFA, and OPP agents.</p>
+  <div class="block">
+    <p class="prose">Too few agents relative to authentication volume produces the identical symptom every time: queued or failed logins, regardless of which agent type is under-provisioned.</p>
+  </div>
+</section>
+
+<section>
+  <h2 class="label mechanism">A Real Reliability-Adjacent Mechanism — Password Sync</h2>
+  <p class="prose">One specific agent-dependent feature with real documented requirements: <b>syncing passwords from Okta to Active Directory</b>, making Okta the source of truth instead of AD.</p>
+  <div class="block">
+    <p class="prose">"The user's current Okta password is pushed to AD the next time the user successfully signs in to Okta." This requires an integrated AD instance, and the AD agent's service account needs <b>password reset and change permissions</b>.</p>
+  </div>
+</section>
+
+<section>
+  <h2 class="label gotcha">The Gotcha — Mutually Exclusive With Delegated Auth</h2>
+  <p class="prose">Password sync only works for <b>Okta-sourced users</b> — not AD-sourced ones — and critically, <b>delegated authentication must be disabled</b>.</p>
+  <div class="quotebox" style="border-left-color:var(--red); color:var(--red);">Delegated auth (Module 1, Sub 1) = Okta asks AD "is this password right?" Password sync = Okta pushes ITS password TO AD. These are opposite directions — you can't run both against the same account.</div>
+  <p class="prose">Also: after a pushed user is activated, they land in a <b>"must change password at next logon"</b> state and have to sign into Okta first before the sync actually takes effect.</p>
+</section>
+
+<section>
+  <h2 class="label angle">The Exam Angle</h2>
+  <p class="prose">Watch for scenario questions built around these traps:</p>
+  <div class="block"><p class="prose">→ "MFA or RADIUS logins are slow/queuing under load." <b>= same HA fix as Module 1 — more agents, separate servers.</b></p></div>
+  <div class="block"><p class="prose">→ "Org wants Okta to be the password source of truth, pushing to AD." <b>= password sync, which requires disabling delegated auth first.</b></p></div>
+</section>
+
+<section>
+  <h2 class="label recall">One Line To Remember</h2>
+  <div class="recallbox">
+    HA for RADIUS/MFA/OPP agents = the same rule as AD agents: 2+ agents, separate servers. Password sync (Okta → AD) is the mirror image of delegated auth (AD → Okta) — they can't both be enabled for the same account; sync requires delegated auth OFF, Okta-sourced users, and service-account password-reset rights.
+  </div>
+  <p class="source">Sources: help.okta.com — radius-best-pract.htm · Security_Using_Sync_Password.htm</p>
+  <p class="milestone">✓ Module 4: Architecture — complete (2 of 2 sub-topics)</p>
+</section>
+
+</div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@4.6.1/dist/reveal.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js-menu@2.1.0/menu.js"></script>
+<script>
+  Reveal.initialize({
+    hash: true,
+    slideNumber: true,
+    transition: 'slide',
+    width: 1200,
+    height: 700,
+    plugins: [ RevealMenu ],
+    menu: {
+      titleSelector: 'h1, h2',
+      useTextContentForMissingTitles: true,
+      markers: true,
+      openButton: true,
+      openSlideNumber: false,
+      keyboard: true,
+      themes: false,
+      transitions: false,
+      themesPath: '',
+      openOnInit: false
+    }
+  });
+</script>
+</body>
+</html>

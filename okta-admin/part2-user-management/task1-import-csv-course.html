@@ -1,0 +1,142 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="color-scheme" content="dark">
+<title>Part II > User Management > Import Users from CSV</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.6.1/dist/reveal.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.6.1/dist/theme/black.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js-menu@2.1.0/menu.css">
+<style>
+  :root {
+    --amber:#f5a623; --red:#ff5c5c; --green:#3ddc84; --purple:#bb86fc; --blue:#5fb3ff; --peach:#ffb787;
+    --accent-glow: rgba(255,183,135,0.10);
+  }
+  .course-home { position: fixed; top: 12px; left: 56px; z-index: 40; font-family: monospace; font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--peach); background: var(--accent-glow); border: 1px solid var(--peach); border-radius: 4px; padding: 4px 9px; text-decoration: none; }
+  .course-home:hover { opacity: .8; }
+  .reveal .slides section { text-align: left; }
+  .reveal { font-size: 30px; }
+  .reveal h1, .reveal h2, .reveal h3 { text-align: left; }
+  .label { display: block; font-size: 0.5em; letter-spacing: 3px; font-weight: 700; text-transform: uppercase; margin: 0 0 14px 0; }
+  .slide-menu-button { color: var(--peach) !important; }
+  .slide-menu-button .fa-bars::before { color: var(--peach); }
+  #slide-menu { background: #0a0a0a !important; }
+  .slide-menu-item a { font-size: 0.8em !important; }
+  .reveal .controls { color: var(--peach); }
+  .label.scenario { color: var(--amber); }
+  .label.mechanism { color: var(--blue); }
+  .label.gotcha { color: var(--red); }
+  .label.connection { color: var(--green); }
+  .label.angle { color: var(--purple); }
+  .label.recall { color: var(--green); }
+  .block { border-top: 1px solid #333; padding-top: 24px; margin-top: 24px; }
+  .block:first-of-type { border-top: none; margin-top: 0; padding-top: 0; }
+  .prose { font-size: 0.68em; line-height: 1.5; color: #e8e8e8; }
+  .prose b { color: #fff; }
+  .quotebox { background: #161616; border: 1px solid #333; border-left: 4px solid var(--blue); border-radius: 6px; padding: 18px 24px; font-family: 'Courier New', monospace; font-size: 0.55em; color: var(--blue); margin: 18px 0; }
+  .titleslide h1 { font-size: 1.6em; margin-bottom: 10px; }
+  .titleslide .sub { font-size: 0.6em; color: #999; }
+  .titleslide .crumb { font-size: 0.45em; color: #666; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 20px; }
+  .recallbox { background: #10201a; border: 1px solid #235; border-left: 4px solid var(--green); border-radius: 6px; padding: 22px 28px; font-size: 0.65em; line-height: 1.5; }
+  .source { font-size: 0.32em; color: #666; margin-top: 20px; }
+  .navlink { font-size: 0.4em; color: var(--peach); text-decoration: none; letter-spacing: 1px; }
+  .navlink:hover { text-decoration: underline; }
+  .navlink.back { display: block; margin-top: 24px; }
+  .navlink.next { display: block; margin-top: 16px; }
+</style>
+</head>
+<body>
+<a class="course-home" href="index.html">← Course Home</a>
+<div class="reveal">
+<div class="slides">
+
+<section class="titleslide">
+  <div class="crumb">Okta Certified Administrator · Part II</div>
+  <h1>User Management</h1>
+  <p class="sub">26% of Part II — hands-on configuration, not multiple choice.</p>
+</section>
+
+<section class="titleslide">
+  <div class="crumb">User Management</div>
+  <h1>Task 1: Import Users from a CSV File</h1>
+  <p class="sub">5 tasks · this deck covers task 1 of 5</p>
+  <a class="navlink back" href="index.html">&uarr; User Management Overview</a>
+</section>
+
+<section>
+  <h2 class="label scenario">The Task</h2>
+  <div class="quotebox">
+    "Import users from a csv file"
+  </div>
+  <p class="prose">A CSV file looks simple — rows and commas. But Okta's importer has specific, exact rules about what those rows and commas mean, and getting them wrong either breaks the import or silently does the wrong thing.</p>
+</section>
+
+<section>
+  <h2 class="label mechanism">The Mechanism — The Template</h2>
+  <p class="prose">The first row of the template is the <b>header row</b> — it contains the attribute names for the <i>current</i> Okta user profile. <b>Don't delete it.</b> Every row after that represents exactly <b>one user</b>, with mandatory columns filled in.</p>
+</section>
+
+<section>
+  <h2 class="label mechanism">The Mechanism — Quoting</h2>
+  <p class="prose">"You don't need to enclose entries in quotations." Plain values are the expected format:</p>
+  <div class="quotebox">firstName,lastName,email,department<br>Jane,Smith,jsmith@acme.com,Marketing</div>
+  <p class="prose">This also works, but it's unnecessary overhead:</p>
+  <div class="quotebox" style="border-left-color:var(--red); color:var(--red);">"Jane","Smith","jsmith@acme.com","Marketing"</div>
+</section>
+
+<section>
+  <h2 class="label gotcha">The Gotcha — Empty Columns</h2>
+  <p class="prose">"Only leave columns empty if they're optional and blank <b>across all rows.</b>" A column can't be optional for some users and required for others within the same file.</p>
+  <div class="block">
+    <p class="prose">The characters <code>,,</code> and <code>,"",</code> are <b>identical</b> — both mean "empty string" for that column:</p>
+    <div class="quotebox">firstName,lastName,email,middleName<br>Jane,Smith,jsmith@acme.com,<br>Jane,Smith,jsmith@acme.com,""</div>
+  </div>
+</section>
+
+<section>
+  <h2 class="label gotcha">The Gotcha — Empty Doesn't Mean Blank</h2>
+  <div class="quotebox" style="border-left-color:var(--red); color:var(--red);">Setting a column to an empty string doesn't set the corresponding attribute to a blank (empty) value.</div>
+  <p class="prose">This is the trap: if a user already has a value in Okta for that attribute, leaving the CSV column empty on an update <b>does not clear it</b>. You cannot use an empty cell to intentionally blank out existing data.</p>
+</section>
+
+<section>
+  <h2 class="label gotcha">The Gotcha — Profile Source Lock</h2>
+  <div class="quotebox" style="border-left-color:var(--red); color:var(--red);">If you use CSV files to import users and have profile source enabled, then user status is only updated through CSV files.</div>
+  <p class="prose">Once this is active, you can't manually flip a user's status in the Admin Console and expect it to stick — the CSV import becomes the single authority for status going forward.</p>
+</section>
+
+<section>
+  <h2 class="label mechanism">The Steps (Admin Console)</h2>
+  <div class="quotebox">1. Directory &gt; People &gt; More actions &gt; Import users from CSV<br>2. Upload CSV — Okta validates formatting<br>3. Fix any validation errors, or proceed<br>4. Choose: auto-activate new users, or disable password creation (IdP-only login)<br>5. Click Import Users</div>
+</section>
+
+<section>
+  <h2 class="label angle">The Angle — What Trips People Up</h2>
+  <p class="prose">Watch for these in your own sandbox run:</p>
+  <div class="block"><p class="prose">→ Deleting the header row by accident — the import can't map columns without it.</p></div>
+  <div class="block"><p class="prose">→ Trying to blank out an existing attribute via CSV — it won't work; empty ≠ clear.</p></div>
+  <div class="block"><p class="prose">→ Forgetting that once profile source + CSV status management is on, manual status changes in the console stop being authoritative.</p></div>
+</section>
+
+<section>
+  <h2 class="label recall">One Line To Remember</h2>
+  <div class="recallbox">
+    Keep the header row, no quotes needed, one user per row. `,,` and `,"",` both mean empty — but empty doesn't clear an existing value. If profile source is enabled with CSV imports, CSV becomes the only way to update user status.
+  </div>
+  <p class="source">Sources: help.okta.com — usgp-import-users-csv.htm</p>
+  <a class="navlink next" href="task2-activate-users-course.html">Next: Task 2 &rarr;</a>
+</section>
+
+</div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@4.6.1/dist/reveal.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js-menu@2.1.0/menu.js"></script>
+<script>
+  Reveal.initialize({
+    hash: true, slideNumber: true, transition: 'slide', width: 1200, height: 700,
+    plugins: [ RevealMenu ],
+    menu: { titleSelector: 'h1, h2', useTextContentForMissingTitles: true, markers: true, openButton: true, openSlideNumber: false, keyboard: true, themes: false, transitions: false, themesPath: '', openOnInit: false }
+  });
+</script>
+</body>
+</html>
