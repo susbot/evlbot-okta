@@ -1,0 +1,118 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="color-scheme" content="dark">
+<title>Part II > Security Enforcement > Test the Authentication Policy</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.6.1/dist/reveal.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.6.1/dist/theme/black.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js-menu@2.1.0/menu.css">
+<style>
+  :root {
+    --amber:#f5a623; --red:#ff5c5c; --green:#3ddc84; --purple:#bb86fc; --blue:#5fb3ff; --peach:#ffb787;
+    --accent-glow: rgba(255,183,135,0.10);
+  }
+  .course-home { position: fixed; top: 12px; left: 56px; z-index: 40; font-family: monospace; font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--peach); background: var(--accent-glow); border: 1px solid var(--peach); border-radius: 4px; padding: 4px 9px; text-decoration: none; }
+  .course-home:hover { opacity: .8; }
+  .reveal .slides section { text-align: left; }
+  .reveal { font-size: 30px; }
+  .reveal h1, .reveal h2, .reveal h3 { text-align: left; }
+  .label { display: block; font-size: 0.5em; letter-spacing: 3px; font-weight: 700; text-transform: uppercase; margin: 0 0 14px 0; }
+  .slide-menu-button { color: var(--peach) !important; }
+  .slide-menu-button .fa-bars::before { color: var(--peach); }
+  #slide-menu { background: #0a0a0a !important; }
+  .slide-menu-item a { font-size: 0.8em !important; }
+  .reveal .controls { color: var(--peach); }
+  .label.scenario { color: var(--amber); }
+  .label.mechanism { color: var(--blue); }
+  .label.gotcha { color: var(--red); }
+  .label.connection { color: var(--green); }
+  .label.angle { color: var(--purple); }
+  .label.recall { color: var(--green); }
+  .block { border-top: 1px solid #333; padding-top: 24px; margin-top: 24px; }
+  .block:first-of-type { border-top: none; margin-top: 0; padding-top: 0; }
+  .prose { font-size: 0.68em; line-height: 1.5; color: #e8e8e8; }
+  .prose b { color: #fff; }
+  .quotebox { background: #161616; border: 1px solid #333; border-left: 4px solid var(--blue); border-radius: 6px; padding: 18px 24px; font-family: 'Courier New', monospace; font-size: 0.55em; color: var(--blue); margin: 18px 0; }
+  .titleslide h1 { font-size: 1.6em; margin-bottom: 10px; }
+  .titleslide .sub { font-size: 0.6em; color: #999; }
+  .titleslide .crumb { font-size: 0.45em; color: #666; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 20px; }
+  .recallbox { background: #10201a; border: 1px solid #235; border-left: 4px solid var(--green); border-radius: 6px; padding: 22px 28px; font-size: 0.65em; line-height: 1.5; }
+  .source { font-size: 0.32em; color: #666; margin-top: 20px; }
+  .navlink { font-size: 0.4em; color: var(--peach); text-decoration: none; letter-spacing: 1px; }
+  .navlink:hover { text-decoration: underline; }
+  .navlink.back { display: block; margin-top: 24px; }
+  .navlink.next { display: block; margin-top: 16px; }
+  .milestone { font-size: 0.4em; color: var(--green); letter-spacing: 1px; margin-top: 20px; }
+  .honestgap { background:#1a1508; border:1px solid #443; border-left:4px solid var(--amber); border-radius:6px; padding:14px 20px; font-size:0.5em; color:#e0c98a; margin:16px 0; }
+</style>
+</head>
+<body>
+<a class="course-home" href="index.html">← Course Home</a>
+<div class="reveal">
+<div class="slides">
+
+<section class="titleslide">
+  <div class="crumb">Okta Certified Administrator · Part II</div>
+  <h1>Security Enforcement</h1>
+  <p class="sub">23% of Part II — the final and most policy-heavy use case.</p>
+</section>
+
+<section class="titleslide">
+  <div class="crumb">Security Enforcement</div>
+  <h1>Task 5: Test the Authentication Policy</h1>
+  <p class="sub">5 tasks · this deck covers task 5 of 5 — the last one in this task set, and in Part II</p>
+  <a class="navlink back" href="index.html">&uarr; Security Enforcement Overview</a>
+</section>
+
+<section>
+  <h2 class="label scenario">The Task</h2>
+  <div class="quotebox">
+    "Test the authentication policy"
+  </div>
+  <p class="prose">Building a policy (Task 4) isn't the finish line. This task is about actually confirming the policy behaves the way you intended before considering the job done.</p>
+</section>
+
+<section>
+  <h2 class="label mechanism">The Mechanism</h2>
+  <p class="prose">Okta provides an <b>Access Testing Tool</b> specifically for evaluating policies — letting you verify a policy's rules produce the expected outcome without waiting for a real user to hit an edge case.</p>
+</section>
+
+<section>
+  <h2 class="label gotcha">The Honest Gap</h2>
+  <div class="honestgap">The source names the Access Testing Tool but doesn't detail its specific interface or step-by-step usage in the excerpt available here. Rather than invent a walkthrough, this is flagged directly — when you reach this task in your sandbox, locate the tool in the Admin Console and explore it hands-on; the lab (built separately, later) will fill in the concrete steps once verified directly against the live tool.</div>
+</section>
+
+<section>
+  <h2 class="label connection">The Connection</h2>
+  <p class="prose">This closes the loop that started back in Task 4: <b>build</b> the policy → <b>test</b> it → confirm it matches intent. The same discipline applies to every policy type covered across this whole course — global session (Task 3), app sign-on (Task 4), and MFA enrollment (Task 2) all deserve the same "verify before you trust it" treatment.</p>
+</section>
+
+<section>
+  <h2 class="label angle">The Angle — What Trips People Up</h2>
+  <p class="prose">Watch for this in your own sandbox run:</p>
+  <div class="block"><p class="prose">→ Assuming a policy works as intended without testing it — always confirm with the Access Testing Tool or a real test sign-in before calling the task complete.</p></div>
+</section>
+
+<section>
+  <h2 class="label recall">One Line To Remember</h2>
+  <div class="recallbox">
+    Never treat a policy as done at creation — Okta's Access Testing Tool exists specifically to verify a policy behaves as intended. This task closes the loop across the whole Security Enforcement use case: build, then test, every policy type.
+  </div>
+  <p class="source">Sources: help.okta.com — about-app-sign-on-policies.htm</p>
+  <p class="milestone">✓ Security Enforcement — 5 of 5 courses complete · Part II courses complete (labs still to come)</p>
+</section>
+
+</div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@4.6.1/dist/reveal.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js-menu@2.1.0/menu.js"></script>
+<script>
+  Reveal.initialize({
+    hash: true, slideNumber: true, transition: 'slide', width: 1200, height: 700,
+    plugins: [ RevealMenu ],
+    menu: { titleSelector: 'h1, h2', useTextContentForMissingTitles: true, markers: true, openButton: true, openSlideNumber: false, keyboard: true, themes: false, transitions: false, themesPath: '', openOnInit: false }
+  });
+</script>
+</body>
+</html>

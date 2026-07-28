@@ -1,0 +1,127 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="color-scheme" content="dark">
+<title>Part II > Security Enforcement > MFA Enrollment Policy</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.6.1/dist/reveal.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.6.1/dist/theme/black.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js-menu@2.1.0/menu.css">
+<style>
+  :root {
+    --amber:#f5a623; --red:#ff5c5c; --green:#3ddc84; --purple:#bb86fc; --blue:#5fb3ff; --peach:#ffb787;
+    --accent-glow: rgba(255,183,135,0.10);
+  }
+  .course-home { position: fixed; top: 12px; left: 56px; z-index: 40; font-family: monospace; font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--peach); background: var(--accent-glow); border: 1px solid var(--peach); border-radius: 4px; padding: 4px 9px; text-decoration: none; }
+  .course-home:hover { opacity: .8; }
+  .reveal .slides section { text-align: left; }
+  .reveal { font-size: 30px; }
+  .reveal h1, .reveal h2, .reveal h3 { text-align: left; }
+  .label { display: block; font-size: 0.5em; letter-spacing: 3px; font-weight: 700; text-transform: uppercase; margin: 0 0 14px 0; }
+  .slide-menu-button { color: var(--peach) !important; }
+  .slide-menu-button .fa-bars::before { color: var(--peach); }
+  #slide-menu { background: #0a0a0a !important; }
+  .slide-menu-item a { font-size: 0.8em !important; }
+  .reveal .controls { color: var(--peach); }
+  .label.scenario { color: var(--amber); }
+  .label.mechanism { color: var(--blue); }
+  .label.gotcha { color: var(--red); }
+  .label.connection { color: var(--green); }
+  .label.angle { color: var(--purple); }
+  .label.recall { color: var(--green); }
+  .block { border-top: 1px solid #333; padding-top: 24px; margin-top: 24px; }
+  .block:first-of-type { border-top: none; margin-top: 0; padding-top: 0; }
+  .prose { font-size: 0.68em; line-height: 1.5; color: #e8e8e8; }
+  .prose b { color: #fff; }
+  .quotebox { background: #161616; border: 1px solid #333; border-left: 4px solid var(--blue); border-radius: 6px; padding: 18px 24px; font-family: 'Courier New', monospace; font-size: 0.55em; color: var(--blue); margin: 18px 0; }
+  .titleslide h1 { font-size: 1.6em; margin-bottom: 10px; }
+  .titleslide .sub { font-size: 0.6em; color: #999; }
+  .titleslide .crumb { font-size: 0.45em; color: #666; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 20px; }
+  .recallbox { background: #10201a; border: 1px solid #235; border-left: 4px solid var(--green); border-radius: 6px; padding: 22px 28px; font-size: 0.65em; line-height: 1.5; }
+  .source { font-size: 0.32em; color: #666; margin-top: 20px; }
+  .navlink { font-size: 0.4em; color: var(--peach); text-decoration: none; letter-spacing: 1px; }
+  .navlink:hover { text-decoration: underline; }
+  .navlink.back { display: block; margin-top: 24px; }
+  .navlink.next { display: block; margin-top: 16px; }
+</style>
+</head>
+<body>
+<a class="course-home" href="index.html">← Course Home</a>
+<div class="reveal">
+<div class="slides">
+
+<section class="titleslide">
+  <div class="crumb">Okta Certified Administrator · Part II</div>
+  <h1>Security Enforcement</h1>
+  <p class="sub">23% of Part II — the final and most policy-heavy use case.</p>
+</section>
+
+<section class="titleslide">
+  <div class="crumb">Security Enforcement</div>
+  <h1>Task 2: Set Up an MFA Enrollment Policy</h1>
+  <p class="sub">5 tasks · this deck covers task 2 of 5</p>
+  <a class="navlink back" href="index.html">&uarr; Security Enforcement Overview</a>
+</section>
+
+<section>
+  <h2 class="label scenario">The Task</h2>
+  <div class="quotebox">
+    "Set up an MFA enrollment policy"
+  </div>
+  <p class="prose">Task 1 turned an authenticator on. This task is about controlling <i>who</i> gets asked to enroll in it, <i>when</i>, and how much runway they get before enrollment becomes mandatory.</p>
+</section>
+
+<section>
+  <h2 class="label mechanism">The Mechanism</h2>
+  <p class="prose">Authenticator enrollment policies manage <b>"how and when your end users enroll authenticators."</b> Each authenticator can be designated <b>Required, Optional, or Disabled</b> for enrollment.</p>
+  <div class="block">
+    <p class="prose">These policies are <b>rule-based</b> — scoping enrollment by conditions like which app a user is accessing, or their geographic location.</p>
+  </div>
+</section>
+
+<section>
+  <h2 class="label connection">The Distinction — Not the Same as Sign-On Policies</h2>
+  <p class="prose">Enrollment policies are <b>separate</b> from sign-on policies, but they interact: <b>"Okta may prompt users to enroll more authenticators if the global session policy, app sign-in policy, or password policy require them."</b></p>
+  <div class="block">
+    <p class="prose">In other words, a sign-on policy can demand a factor the user hasn't enrolled yet — and that's what triggers the enrollment prompt, even outside the enrollment policy's own rules.</p>
+  </div>
+</section>
+
+<section>
+  <h2 class="label gotcha">The Gotcha — Two Grace Period Types</h2>
+  <div class="quotebox">
+    End date — daily enrollment prompts until a specific date, then enrollment becomes mandatory<br>
+    Skip count (Early Access) — prompts continue until the user skips a set number of times, then mandatory
+  </div>
+  <p class="prose">Once either grace period expires, the option to proceed without enrolling <b>disappears entirely.</b></p>
+</section>
+
+<section>
+  <h2 class="label angle">The Angle — What Trips People Up</h2>
+  <p class="prose">Watch for these in your own sandbox run:</p>
+  <div class="block"><p class="prose">→ Confusing enrollment policy (who enrolls, when) with sign-on policy (what's required at login) — they're separate, interacting systems.</p></div>
+  <div class="block"><p class="prose">→ Not realizing skip-count grace periods are an Early Access feature, not available by default.</p></div>
+</section>
+
+<section>
+  <h2 class="label recall">One Line To Remember</h2>
+  <div class="recallbox">
+    Enrollment policies set each authenticator to Required/Optional/Disabled, scoped by rules (app, location). They're distinct from sign-on policies, though sign-on policies can still trigger enrollment prompts. Two grace period types: end-date (daily prompts until a date) or skip-count (Early Access) — either way, once it expires, enrollment becomes mandatory.
+  </div>
+  <p class="source">Sources: help.okta.com — about-mfa-enrollment-policies.htm</p>
+  <a class="navlink next" href="task3-modify-global-session-policy-course.html">Next: Task 3 &rarr;</a>
+</section>
+
+</div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@4.6.1/dist/reveal.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js-menu@2.1.0/menu.js"></script>
+<script>
+  Reveal.initialize({
+    hash: true, slideNumber: true, transition: 'slide', width: 1200, height: 700,
+    plugins: [ RevealMenu ],
+    menu: { titleSelector: 'h1, h2', useTextContentForMissingTitles: true, markers: true, openButton: true, openSlideNumber: false, keyboard: true, themes: false, transitions: false, themesPath: '', openOnInit: false }
+  });
+</script>
+</body>
+</html>

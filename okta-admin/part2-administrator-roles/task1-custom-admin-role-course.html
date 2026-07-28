@@ -1,0 +1,126 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="color-scheme" content="dark">
+<title>Part II > Administrator Roles > Create a Custom Admin Role</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.6.1/dist/reveal.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.6.1/dist/theme/black.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js-menu@2.1.0/menu.css">
+<style>
+  :root {
+    --amber:#f5a623; --red:#ff5c5c; --green:#3ddc84; --purple:#bb86fc; --blue:#5fb3ff; --peach:#ffb787;
+    --accent-glow: rgba(255,183,135,0.10);
+  }
+  .course-home { position: fixed; top: 12px; left: 56px; z-index: 40; font-family: monospace; font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--peach); background: var(--accent-glow); border: 1px solid var(--peach); border-radius: 4px; padding: 4px 9px; text-decoration: none; }
+  .course-home:hover { opacity: .8; }
+  .reveal .slides section { text-align: left; }
+  .reveal { font-size: 30px; }
+  .reveal h1, .reveal h2, .reveal h3 { text-align: left; }
+  .label { display: block; font-size: 0.5em; letter-spacing: 3px; font-weight: 700; text-transform: uppercase; margin: 0 0 14px 0; }
+  .slide-menu-button { color: var(--peach) !important; }
+  .slide-menu-button .fa-bars::before { color: var(--peach); }
+  #slide-menu { background: #0a0a0a !important; }
+  .slide-menu-item a { font-size: 0.8em !important; }
+  .reveal .controls { color: var(--peach); }
+  .label.scenario { color: var(--amber); }
+  .label.mechanism { color: var(--blue); }
+  .label.gotcha { color: var(--red); }
+  .label.connection { color: var(--green); }
+  .label.angle { color: var(--purple); }
+  .label.recall { color: var(--green); }
+  .block { border-top: 1px solid #333; padding-top: 24px; margin-top: 24px; }
+  .block:first-of-type { border-top: none; margin-top: 0; padding-top: 0; }
+  .prose { font-size: 0.68em; line-height: 1.5; color: #e8e8e8; }
+  .prose b { color: #fff; }
+  .quotebox { background: #161616; border: 1px solid #333; border-left: 4px solid var(--blue); border-radius: 6px; padding: 18px 24px; font-family: 'Courier New', monospace; font-size: 0.55em; color: var(--blue); margin: 18px 0; }
+  .titleslide h1 { font-size: 1.6em; margin-bottom: 10px; }
+  .titleslide .sub { font-size: 0.6em; color: #999; }
+  .titleslide .crumb { font-size: 0.45em; color: #666; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 20px; }
+  .recallbox { background: #10201a; border: 1px solid #235; border-left: 4px solid var(--green); border-radius: 6px; padding: 22px 28px; font-size: 0.65em; line-height: 1.5; }
+  .source { font-size: 0.32em; color: #666; margin-top: 20px; }
+  .navlink { font-size: 0.4em; color: var(--peach); text-decoration: none; letter-spacing: 1px; }
+  .navlink:hover { text-decoration: underline; }
+  .navlink.back { display: block; margin-top: 24px; }
+  .navlink.next { display: block; margin-top: 16px; }
+</style>
+</head>
+<body>
+<a class="course-home" href="index.html">← Course Home</a>
+<div class="reveal">
+<div class="slides">
+
+<section class="titleslide">
+  <div class="crumb">Okta Certified Administrator · Part II</div>
+  <h1>Administrator Roles</h1>
+  <p class="sub">20% of Part II — permission scoping, not just access.</p>
+</section>
+
+<section class="titleslide">
+  <div class="crumb">Administrator Roles</div>
+  <h1>Task 1: Create a Custom Admin Role</h1>
+  <p class="sub">4 tasks · this deck covers task 1 of 4</p>
+  <a class="navlink back" href="index.html">&uarr; Administrator Roles Overview</a>
+</section>
+
+<section>
+  <h2 class="label scenario">The Task</h2>
+  <div class="quotebox">
+    "Create a custom admin role"
+  </div>
+  <p class="prose">Okta's standard admin roles are broad. When a job only needs a slice of that power, a custom role is how you build exactly that slice.</p>
+</section>
+
+<section>
+  <h2 class="label mechanism">The Mechanism</h2>
+  <p class="prose">A role is <b>"a set of permissions that you constrain an admin to."</b> Two types exist: <b>standard</b> and <b>custom</b>. Currently, custom roles are limited to managing <b>user, group, and app activity</b>, plus running <b>profile source imports</b> — broader admin permissions aren't yet supported for custom roles.</p>
+</section>
+
+<section>
+  <h2 class="label mechanism">What Makes Custom Roles Different — Resource Sets</h2>
+  <p class="prose"><b>Resource sets are only available for custom admin roles</b> — this is the real distinguishing feature. A resource set lets you constrain a role to a specific collection of resources, instead of granting it org-wide reach.</p>
+  <div class="block">
+    <p class="prose">You can build an assignment starting from any of three components: the <b>Admin</b> (user/group), the <b>Role</b> (permission set), or the <b>Resource set</b> (resource collection) — whichever makes sense for how you're thinking about the assignment.</p>
+  </div>
+</section>
+
+<section>
+  <h2 class="label gotcha">The Gotcha — Real Limits</h2>
+  <div class="quotebox" style="border-left-color:var(--red); color:var(--red);">
+    Max 100 custom roles per org<br>
+    Max 10,000 resource sets<br>
+    Max 1,000 resources per resource set<br>
+    Max 1,000 admins sharing the same role + resource-set combination
+  </div>
+  <p class="prose">These aren't soft guidelines — plan a scalable role/resource-set naming and structure strategy before you hit them.</p>
+</section>
+
+<section>
+  <h2 class="label angle">The Angle — What Trips People Up</h2>
+  <p class="prose">Watch for these in your own sandbox run:</p>
+  <div class="block"><p class="prose">→ Trying to grant a custom role permissions beyond user/group/app management + profile source imports — not currently supported.</p></div>
+  <div class="block"><p class="prose">→ Assuming standard roles can be scoped to a resource set — that's a custom-role-only feature.</p></div>
+</section>
+
+<section>
+  <h2 class="label recall">One Line To Remember</h2>
+  <div class="recallbox">
+    Custom roles constrain permissions to user/group/app management + profile source imports, and are the only role type that supports resource sets (scoping to a specific resource collection). Real limits: 100 roles/org, 10,000 resource sets, 1,000 resources/set, 1,000 admins per role+resource-set combo.
+  </div>
+  <p class="source">Sources: help.okta.com — about-creating-custom-admin-roles.htm</p>
+  <a class="navlink next" href="task2-assign-admin-role-course.html">Next: Task 2 &rarr;</a>
+</section>
+
+</div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@4.6.1/dist/reveal.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js-menu@2.1.0/menu.js"></script>
+<script>
+  Reveal.initialize({
+    hash: true, slideNumber: true, transition: 'slide', width: 1200, height: 700,
+    plugins: [ RevealMenu ],
+    menu: { titleSelector: 'h1, h2', useTextContentForMissingTitles: true, markers: true, openButton: true, openSlideNumber: false, keyboard: true, themes: false, transitions: false, themesPath: '', openOnInit: false }
+  });
+</script>
+</body>
+</html>
