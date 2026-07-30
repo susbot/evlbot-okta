@@ -14,6 +14,7 @@ body{background:var(--bg);color:var(--text);font-family:'IBM Plex Sans',sans-ser
 .top-nav{display:flex;align-items:center;justify-content:space-between;padding:14px 20px;border-bottom:1px solid var(--border);position:sticky;top:0;background:var(--bg);z-index:100;}
 .nav-badge{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent-bright);background:var(--accent-glow);border:1px solid var(--accent);border-radius:4px;padding:3px 9px;}
 .nav-title{font-size:13px;color:var(--subtle);}
+.nav-right{display:flex;align-items:center;gap:8px;}
 .nav-link{font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;color:var(--accent-bright);background:var(--accent-glow);border:1px solid var(--border);border-radius:4px;padding:4px 10px;text-decoration:none;letter-spacing:.06em;transition:opacity .15s;}
 .nav-link:hover{opacity:.75;}
 
@@ -74,7 +75,10 @@ body{background:var(--bg);color:var(--text);font-family:'IBM Plex Sans',sans-ser
     <span class="nav-badge">evlbot.xyz</span>
     <span class="nav-title">Okta Certified Administrator · Hands-On Configuration Exam</span>
   </a>
-  <a href="https://evlbot.xyz/about.html" class="nav-link" target="_blank" rel="noopener">About</a>
+  <div class="nav-right">
+    <a href="https://evlbot.xyz" class="nav-link">&#127968; All Guides</a>
+    <a href="https://evlbot.xyz/about.html" class="nav-link" target="_blank" rel="noopener">About</a>
+  </div>
 </div>
 
 <div class="hero">
@@ -168,6 +172,20 @@ body{background:var(--bg);color:var(--text);font-family:'IBM Plex Sans',sans-ser
     <div class="mod-desc">Set up an authenticator · MFA enrollment policy · Modify global session policy · Create &amp; test an authentication policy</div>
     <div class="mod-footer"><span class="mod-slides">5 of 5 courses built · labs pending</span></div>
     <a class="mod-link" href="okta-admin/part2-security-enforcement/index.html">Explore →</a>
+  </div>
+
+</div>
+
+<div class="section-header">Second Certification — Okta Certified Workflows · Specialty</div>
+
+<div class="card-grid">
+
+  <div class="module-card available active" style="border-color:#34d399;">
+    <div class="mod-top"><span class="mod-num" style="color:#6ee7b7;background:rgba(52,211,153,0.10);border-color:#34d399;">30 MCQ + 4 USE CASES</span><span class="pill pill-ready" style="background:rgba(52,211,153,.12);color:#34d399;border-color:rgba(52,211,153,.25);">Active</span></div>
+    <div class="mod-title">Workflows Overview, Architecting, Building, Running &amp; Troubleshooting Flows</div>
+    <div class="mod-desc">Part I's 5 sections (28 sub-topics) covering the no-code automation platform — plus Part II's 4 hands-on use cases (13 course tasks): Create Groups, Update Profile Attributes, API Endpoints, Create a Report.</div>
+    <div class="mod-footer"><span class="mod-slides">5/5 Part I sections · 4/4 Part II use cases built</span></div>
+    <a class="mod-link" href="okta-workflows/index.html" style="background:#34d399;">Explore →</a>
   </div>
 
 </div>
